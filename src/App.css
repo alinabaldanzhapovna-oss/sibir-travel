@@ -28,8 +28,6 @@ body {
 }
 
 .app {
-  max-width: 1400px;
-  margin: 0 auto;
   width: 100%;
   padding: 0 1rem;
 }
@@ -42,9 +40,8 @@ body {
   background: 
     linear-gradient(rgba(50, 113, 223, 0.6), rgba(50, 113, 223, 0.6)),
     url('https://media.rsrv.me/img.php?rst=9179&pid=85723&v=1920x1080&webp=1');
-  background-size: contain;
+  background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
   position: relative;
   display: flex;
   align-items: center;
