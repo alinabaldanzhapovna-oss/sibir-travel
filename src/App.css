@@ -34,13 +34,14 @@ body {
 
 /* Hero Section */
 .hero {
-  height: 70vh;
+  min-height: 70vh;
+  height: auto;
   background: 
     linear-gradient(rgba(50, 113, 223, 0.6), rgba(50, 113, 223, 0.6)),
     url('https://media.rsrv.me/img.php?rst=9179&pid=85723&v=1920x1080&webp=1');
-  background-size: cover;
+  background-size: contain;
   background-position: center;
-  background-attachment: fixed;
+  background-repeat: no-repeat;
   position: relative;
   display: flex;
   align-items: center;
@@ -57,24 +58,13 @@ body {
   }
 }
 
-@media (max-width: 768px) {
-  .hero {
-    height: 50vh;
-    background-attachment: scroll;
-    background-size: contain;
-  }
-}
-
 .hero-overlay {
-  background: rgba(50, 113, 223, 0.4);
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  background: rgba(50, 113, 223, 0.6);
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 2rem 1rem;
 }
 
 .hero-content {
@@ -82,7 +72,7 @@ body {
   color: var(--white);
   z-index: 2;
   max-width: 800px;
-  padding: 0 20px;
+  padding: 2rem 1rem; /* ← Отступ сверху и снизу */
 }
 
 .hero-content h1 {
@@ -102,6 +92,53 @@ body {
   justify-content: center;
   gap: 2rem;
   margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+/* Адаптивность для планшетов и маленьких мониторов */
+@media (max-width: 1024px) {
+  .hero-content h1 {
+    font-size: 2.8rem;
+    line-height: 1.2;
+  }
+
+  .hero-content p {
+    font-size: 1.1rem;
+  }
+
+  .hero-stats {
+    gap: 1rem;
+  }
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+  .hero {
+    min-height: 80vh;
+    background-size: contain;
+  }
+
+  .hero-content h1 {
+    font-size: 2.5rem;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-content p {
+    font-size: 1rem;
+  }
+
+  .hero-stats {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+/* Фильтры */
+.filter-buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap; /* ← Перенос на новую строку */
 }
 
 .stat {
@@ -109,6 +146,18 @@ body {
   padding: 0.5rem 1rem;
   border-radius: 20px;
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Лёгкая тень для глубины */
+}
+
+@media (max-width: 768px) {
+  .stat {
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: none; /* Убираем тень на мобильных — чтобы не перегружать */
+  }
 }
 
 .cta-button {
