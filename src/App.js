@@ -16,6 +16,12 @@ const App = () => {
     region: 'all'
   });
 
+  // ✅ НОВОЕ СОСТОЯНИЕ: показать уведомление с маршрутом
+  const [showPlanMessage, setShowPlanMessage] = useState(false);
+
+  const [travelPlan, setTravelPlan] = useState([]);
+  const [selectedType, setSelectedType] = useState('all');
+
   // Данные о достопримечательностях Сибири
   const attractions = [
     {
@@ -152,8 +158,6 @@ const App = () => {
     { id: 'relax', name: 'Отдых', emoji: '😌' }
   ];
 
-  const [selectedType, setSelectedType] = useState('all');
-
   // Фильтрация достопримечательностей
   const filteredAttractions = attractions.filter(attr => {
     const regionMatch = selectedRegion === 'all' || attr.region === selectedRegion;
@@ -178,6 +182,7 @@ const App = () => {
 
   const closePlanner = () => {
     setIsPlannerOpen(false);
+    setShowPlanMessage(false); // ✅ Скрываем сообщение при закрытии
   };
 
   const handlePlannerChange = (field, value) => {
@@ -197,7 +202,6 @@ const App = () => {
   };
 
   const generateTravelPlan = () => {
-    // Фильтруем достопримечательности по выбранным параметрам
     const suitableAttractions = attractions.filter(attr => {
       const regionMatch = plannerData.region === 'all' || attr.region === plannerData.region;
       const budgetMatch = attr[season].price <= plannerData.budget || attr[season].price === 0;
@@ -206,7 +210,7 @@ const App = () => {
           if (interest === 'adventure') return ['mountains', 'extreme', 'nature'].includes(attr.type);
           if (interest === 'culture') return ['culture', 'history'].includes(attr.type);
           if (interest === 'nature') return attr.type === 'nature';
-          if (interest === 'photography') return true; // все места подходят для фото
+          if (interest === 'photography') return true;
           if (interest === 'extreme') return attr.type === 'extreme';
           if (interest === 'relax') return ['nature', 'culture'].includes(attr.type);
           return true;
@@ -215,7 +219,6 @@ const App = () => {
       return regionMatch && budgetMatch && interestMatch;
     });
 
-    // Сортируем по цене и выбираем топ для маршрута
     const recommendedPlaces = suitableAttractions
       .sort((a, b) => b[season].price - a[season].price)
       .slice(0, Math.min(plannerData.days / 2, 5));
@@ -227,7 +230,12 @@ const App = () => {
     return plan.reduce((total, attraction) => total + attraction[season].price, 0);
   };
 
-  const [travelPlan, setTravelPlan] = useState([]);
+  // ✅ Функция: показать уведомление с маршрутом
+  const showGeneratedPlan = () => {
+    setShowPlanMessage(true);
+    setTimeout(() => setShowPlanMessage(false), 7000); // Автоматически скроется через 5 сек
+  };
+
 
   useEffect(() => {
     if (isPlannerOpen) {
@@ -467,32 +475,32 @@ const App = () => {
       )}
 
       {/* Призыв к действию */}
-<section className="inspiration-section">
-  <div className="inspiration-content">
-    <h2>Готовы к магии Сибири?</h2>
-    <p>Байкал, Саяны и древняя культура Бурятии ждут вас. Это путешествие изменит ваше представление о России.</p>
-    <div className="inspiration-stats">
-      <div className="inspiration-stat">
-        <div className="number">99%</div>
-        <div className="label">туристов рекомендуют</div>
-      </div>
-      <div className="inspiration-stat">
-        <div className="number">#1</div>
-        <div className="label">в рейтинге National Geographic</div>
-      </div>
-      <div className="inspiration-stat">
-        <div className="number">24/7</div>
-        <div className="label">поддержка гидов</div>
-      </div>
-    </div>
-    <button 
-      className="inspiration-cta"
-      onClick={openPlanner}
-    >
-      Начать планирование
-    </button>
-  </div>
-</section>
+      <section className="inspiration-section">
+        <div className="inspiration-content">
+          <h2>Готовы к магии Сибири?</h2>
+          <p>Байкал, Саяны и древняя культура Бурятии ждут вас. Это путешествие изменит ваше представление о России.</p>
+          <div className="inspiration-stats">
+            <div className="inspiration-stat">
+              <div className="number">99%</div>
+              <div className="label">туристов рекомендуют</div>
+            </div>
+            <div className="inspiration-stat">
+              <div className="number">#1</div>
+              <div className="label">в рейтинге National Geographic</div>
+            </div>
+            <div className="inspiration-stat">
+              <div className="number">24/7</div>
+              <div className="label">поддержка гидов</div>
+            </div>
+          </div>
+          <button 
+            className="inspiration-cta"
+            onClick={openPlanner}
+          >
+            Начать планирование
+          </button>
+        </div>
+      </section>
 
       {/* Модальное окно планировщика */}
       {isPlannerOpen && (
@@ -627,16 +635,35 @@ const App = () => {
                   <div className="plan-total">
                     Общая стоимость: {calculateTotalCost(travelPlan).toLocaleString()} ₽
                   </div>
-                  <button className="save-plan-btn">
+                  <button 
+                    className="save-plan-btn"
+                    onClick={showGeneratedPlan}
+                  >
                     💾 Сохранить маршрут
                   </button>
+                </div>
+              )}
+
+              {/* ✅ ВСПЛЫВАЮЩЕЕ СООБЩЕНИЕ С МАРШРУТОМ */}
+              {showPlanMessage && (
+                <div className="plan-message">
+                  <h4>✨ Ваш маршрут:</h4>
+                  <ul>
+                    {travelPlan.map((place, index) => (
+                      <li key={index}>
+                        День {index + 1}: {place.name} — {place[season].price} ₽
+                      </li>
+                    ))}
+                  </ul>
+                  <p><strong>Общая стоимость: {calculateTotalCost(travelPlan).toLocaleString()} ₽</strong></p>
                 </div>
               )}
             </div>
           </div>
         </div>
       )}
-          {/* Footer */}
+
+      {/* Footer */}
       <footer className="footer">
         <p>&copy; {new Date().getFullYear()} Всё права защищены. Сибирь: Земля легенд</p>
       </footer>

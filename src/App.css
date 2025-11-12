@@ -59,7 +59,7 @@ body {
 }
 
 .hero-overlay {
-  background: rgba(50, 113, 223, 0.6);
+  background: rgba(50, 113, 223, 0.4);
   position: absolute;
   top: 0;
   left: 0;
@@ -1074,4 +1074,52 @@ body {
   margin: 0 auto;
   width: 100%;
   padding-bottom: 2rem;
+}
+
+/* Плавное уведомление с маршрутом */
+.plan-message {
+  background: rgba(64, 127, 191, 0.1);
+  border: 1px solid rgba(64, 127, 191, 0.3);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+  color: var(--text);
+  animation: fadeInOut 0.8s ease-out;
+  max-width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.plan-message h4 {
+  margin-bottom: 0.8rem;
+  color: var(--primary);
+  font-size: 1.2rem;
+}
+
+.plan-message ul {
+  margin: 0.8rem 0;
+  padding-left: 1.5rem;
+}
+
+.plan-message li {
+  margin-bottom: 0.3rem;
+  font-size: 0.95rem;
+}
+
+.plan-message p {
+  margin-top: 1rem;
+  font-weight: bold;
+  color: var(--accent);
+  font-size: 1.1rem;
+}
+
+@keyframes fadeInOut {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
