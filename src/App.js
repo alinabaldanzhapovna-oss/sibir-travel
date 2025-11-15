@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import ReactGA from 'react-ga4'; 
 
 const App = () => {
   const [selectedRegion, setSelectedRegion] = useState('all');
@@ -167,6 +168,7 @@ const App = () => {
   });
 
   const openModal = (attraction) => {
+    ReactGA.event('click', { category: 'Attraction', action: 'open_detail', label: attraction.name });
     setSelectedAttraction(attraction);
     setIsModalOpen(true);
   };
@@ -177,6 +179,7 @@ const App = () => {
   };
 
   const openPlanner = () => {
+    ReactGA.event('click', { category: 'CTA', action: 'open_planner' });
     setIsPlannerOpen(true);
   };
 
@@ -202,6 +205,7 @@ const App = () => {
   };
 
   const generateTravelPlan = () => {
+    ReactGA.event('click', { category: 'Planner', action: 'generate_plan' });
     const suitableAttractions = attractions.filter(attr => {
       const regionMatch = plannerData.region === 'all' || attr.region === plannerData.region;
       const budgetMatch = attr[season].price <= plannerData.budget || attr[season].price === 0;
